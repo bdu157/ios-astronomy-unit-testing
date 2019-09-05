@@ -30,7 +30,23 @@ class MarsRoverClientTests: XCTestCase {
 
     //testFetchMarsRover() if the decoding works and the data gets brought in
     func testFetchMarsRover() {
+        
+        var marsRover: MarsRover!
+        
         let mock = MockLoader()
+        mock.data = validRoverJSON
+        let controller = MarsRoverClient(networkLoader: mock)
+        
+        let resultsExpectation = expectation(description: "Wait for results")
+        
+        controller.fetchMarsRover(named: "Curiosity") { (data, error) in
+            resultsExpectation.fulfill()
+            marsRover = data
+        }
+        wait(for: [resultsExpectation], timeout: 2)
+        
+        XCTAssertTrue(marsRover.name == "Curiosity", "Expecting Curiosity marsRover being fetched correctly")
+        XCTAssertTrue(marsRover.maxSol == 10, "Expecting maxSol to be 10")
         
     }
     

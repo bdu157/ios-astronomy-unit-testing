@@ -9,7 +9,7 @@
 import Foundation
 @testable import Astronomy
 
-struct MockLoader: NetworkDataLoader {
+class MockLoader: NetworkDataLoader {
     var data: Data?
     var error: Error?
     
