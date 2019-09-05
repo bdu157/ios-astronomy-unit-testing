@@ -34,6 +34,7 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
         self.solDescription = solDescriptions[index-1]
     }
     
+    
     @IBAction func goToNextSol(_ sender: Any?) {
         guard let solDescription = solDescription else { return }
         guard let solDescriptions = roverInfo?.solDescriptions else { return }
@@ -41,6 +42,11 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
         guard index < solDescriptions.count - 1 else { return }
         self.solDescription = solDescriptions[index+1]
     }
+    //solDescriptions[0] at first -> when clicking goToNext, index = 0
+    //0 < count of [sol1, sol2, sol3, sol4] is 4 then index + 1 so it can show solDescriptions[1]
+    //this is making sure that it wont go over count of sols within the array otherwise photos wont show
+    
+    
     
     // UICollectionViewDataSource/Delegate
     
