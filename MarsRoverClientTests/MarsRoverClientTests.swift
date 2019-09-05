@@ -28,10 +28,13 @@ class MarsRoverClientTests: XCTestCase {
      Is the completion handler called if the networking fails?
      */
 
+    
+    var marsRover: MarsRover!
+    var marsPhotoReference: [MarsPhotoReference]!
+    
     //testFetchMarsRover() if the decoding works and the data gets brought in
+
     func testFetchMarsRover() {
-        
-        var marsRover: MarsRover!
         
         let mock = MockLoader()
         mock.data = validRoverJSON
@@ -41,21 +44,74 @@ class MarsRoverClientTests: XCTestCase {
         
         controller.fetchMarsRover(named: "Curiosity") { (data, error) in
             resultsExpectation.fulfill()
-            marsRover = data
+            self.marsRover = data
         }
         wait(for: [resultsExpectation], timeout: 2)
         
         XCTAssertTrue(marsRover.name == "Curiosity", "Expecting Curiosity marsRover being fetched correctly")
         XCTAssertTrue(marsRover.maxSol == 10, "Expecting maxSol to be 10")
+        XCTAssertEqual(4156, marsRover.numberOfPhotos)
         
     }
+    
+    //with badData
+    
+    func testFetchMarsRoverWithBadData() {
+        let mock = MockLoader()
+        mock.data = invalidRoverJSON
+        let controller = MarsRoverClient(networkLoader: mock)
+        
+        let resultExpectation = expectation(description: "Wait for results")
+        
+        controller.fetchMarsRover(named: "Curiosity") { (data, error) in
+            resultExpectation.fulfill()
+            self.marsRover = data
+        }
+        
+        wait(for: [resultExpectation], timeout: 2)
+        
+        XCTAssertTrue(marsRover == nil, "Expecting error in decoding")
+        XCTAssertNotNil(controller.error)
+    }
+    
     
     
     //testFetchPhotos() if the MarsPhotorReference decodes correctly and bring the data
     func testFetchPhoto() {
         
+        //fetchMarsRover
+        let mock = MockLoader()
+        mock.data = validRoverJSON
+        let controller = MarsRoverClient(networkLoader: mock)
+        
+        let resultsExpectation = expectation(description: "Wait for results")
+        
+        controller.fetchMarsRover(named: "Curiosity") { (data, error) in
+            resultsExpectation.fulfill()
+            self.marsRover = data
+        }
+        wait(for: [resultsExpectation], timeout: 2)
+        
+        XCTAssertTrue(marsRover.name == "Curiosity", "Expecting Curiosity marsRover being fetched correctly")
+        XCTAssertTrue(marsRover.maxSol == 10, "Expecting maxSol to be 10")
+        XCTAssertEqual(4156, marsRover.numberOfPhotos)
+        
+        
+        //getting marsPhoto
+        mock.data = validSol1JSON
+        
+        let resultsExpectations = expectation(description: "Wait for results")
+        
+        controller.fetchPhotos(from: self.marsRover, onSol: 1) { (data, error) in
+            resultsExpectations.fulfill()
+            self.marsPhotoReference = data
+        }
+        
+        wait(for: [resultsExpectations], timeout: 2)
+        
+        XCTAssertEqual(1, marsPhotoReference[0].sol)
+        XCTAssertTrue(marsPhotoReference[0].id == 4477, "Expecting marsPhoto")
+        XCTAssertEqual("MAST", marsPhotoReference[0].camera.name)
+        XCTAssertNil(controller.error)
     }
-    //test bad data and data that are not existing
-    
-    //inside of mock add DispatchQueue.main.asysn to give a delay of the call
 }

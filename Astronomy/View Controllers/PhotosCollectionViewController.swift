@@ -46,6 +46,8 @@ class PhotosCollectionViewController: UIViewController, UICollectionViewDataSour
     //0 < count of [sol1, sol2, sol3, sol4] is 4 then index + 1 so it can show solDescriptions[1]
     //this is making sure that it wont go over count of sols within the array otherwise photos wont show
     
+    
+    
     // UICollectionViewDataSource/Delegate
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

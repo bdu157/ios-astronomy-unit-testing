@@ -16,6 +16,7 @@ class MarsRoverClient {
         self.networkLoader = networkLoader
     }
     
+    var error: Error?
     
     func fetchMarsRover(named name: String,
                         completion: @escaping (MarsRover?, Error?) -> Void) {
@@ -69,6 +70,7 @@ class MarsRoverClient {
                     completion(decodedObject, nil)
                 } catch {
                     completion(nil, error)
+                    self.error = error
                 }
         }
     }
