@@ -9,8 +9,8 @@
 import XCTest
 @testable import Astronomy
 
-
 class MarsRoverClientTests: XCTestCase {
+    
     
     /*
      Does decoding work?
@@ -28,24 +28,18 @@ class MarsRoverClientTests: XCTestCase {
      Is the completion handler called if the networking fails?
      */
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    //testFetchMarsRover() if the decoding works and the data gets brought in
+    func testFetchMarsRover() {
+        let mock = MockLoader()
+        
     }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    
+    //testFetchPhotos() if the MarsPhotorReference decodes correctly and bring the data
+    func testFetchPhoto() {
+        
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+    //test bad data and data that are not existing
+    
+    //inside of mock add DispatchQueue.main.asysn to give a delay of the call
 }
